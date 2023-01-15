@@ -25,14 +25,15 @@ let port = 5000;
  */
 //checkPort();
 
-const apiKey = fs.readFileSync(process.env.OPENAI_API_KEY).toString();
+//let apiKey = fs.readFileSync(process.env.OPENAI_API_KEY);
 
-console.log(apiKey);
+
 const configuration = new Configuration({
-    apiKey: apiKey
+    apiKey: process.env.OPENAI_API_KEY
 });
 
 const openai = new OpenAIApi(configuration);
+
 
 function generateUniqueID() {
     const timestamp = Date.now();
