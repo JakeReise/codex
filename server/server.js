@@ -25,7 +25,8 @@ let port = 5000;
  */
 //checkPort();
 
-//let apiKey = fs.readFileSync(process.env.OPENAI_API_KEY);
+let apiKeyTest = process.env.OPENAI_API_KEY;
+console.log(`apiKeyTest is ${apiKeyTest}`);
 
 
 const configuration = new Configuration({
