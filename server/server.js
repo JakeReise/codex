@@ -26,7 +26,9 @@ let port = 5000;
 //checkPort();
 
 let apiKeyTest = process.env.OPENAI_API_KEY;
-console.log(`apiKeyTest is ${apiKeyTest}`);
+let apiCallType = "";
+var openaiAPICallTamplate = "";
+//console.log(`apiKeyTest is ${apiKeyTest}`);
 
 
 const configuration = new Configuration({
@@ -44,6 +46,33 @@ function generateUniqueID() {
     return `id-${timestamp}-${hexadecimalString}`;
   }
 
+function stringParser(str) {
+	if (str.startsWith('parsedata')) {
+        var apiCommand = `model: "text-davinci-003",\n        prompt: \`${prompt}\`,\n        temperature: 0,\n        max_tokens: 3000,\n        top_p: 1,\n        frequency_penalty: 0,\n        presence_penalty: 0,`;
+        /*
+        model: "text-davinci-003",
+        prompt: `${prompt}`,
+        temperature: 0,
+        max_tokens: 3000,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0,
+        */
+    } else {
+        var apiCpmmand = `model: "text-davinci-002",\n        prompt: \`${prompt}\`,\n        temperature: 0,\n        max_tokens: 3000,\n        top_p: 1,\n        frequency_penalty: 0,\n        presence_penalty: 0,\n        stop_sequence: """,`;
+        /*
+        model: "text-davinci-002",
+        prompt: `${prompt}`,
+        temperature: 0,
+        max_tokens: 3000,
+        top_p: 1,
+        frequency_penalty: 0.5,
+        presence_penalty: 0,
+        stop_sequence: """,
+        */
+    }
+};
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -57,17 +86,13 @@ app.get('/', async (req, res) => {
 app.post('/', async (req, res) =>{
     const uniqueId = generateUniqueID();
     console.log(`Posting for request#${uniqueId}`);
+    const prompt = req.body.prompt;
+    let apiCommand = stringParser(prompt);
+    //const responseString = "createCompletion";
     try {
-        const prompt = req.body.prompt;
-
+        
         const response = await openai.createCompletion({
-            model: "text-davinci-003",
-            prompt: `${prompt}`,
-            temperature: 0,
-            max_tokens: 3000,
-            top_p: 1,
-            frequency_penalty: 0.5,
-            presence_penalty: 0,
+            apiCallType
         });
 
         res.status(200).send({
